@@ -1,7 +1,7 @@
 # 排序演算法效能分析報告
 **學號：** [11428104]  
 **姓名：** [林恩慈]  
-**實驗頁面：** [https://linenci.github.io/sort_report/](https://linenci.github.io/sort_report/)
+**模擬頁面：** [https://linenci.github.io/sort_report/](https://linenci.github.io/sort_report/)
 ## 1. 前言
 在資訊科學領域中，排序演算法是處理資料的基石。不同的演算法在應對不同規模的數據時，表現出的效率差異極大。本報告透過實作五種排序法，並進行模擬實驗，分析其時間複雜度、理論分析與實際執行效能之間的關聯，進行歸納。
 
@@ -11,28 +11,38 @@
 
 ### 氣泡排序 (Bubble Sort)
 - **原理**：透過重複比較相鄰的兩個元素，若順序錯誤則交換，使較大的元素逐漸往後移動。
-- **操作**：每一輪掃描後，最後一個未排序位置會被填入正確的極值。
-模擬頁面：[氣泡排序示範](https://linenci.github.io/sort_report/bubble_sort.html)
+  **操作**：每一輪掃描後，最後一個未排序位置會被填入正確的極值。
+  **優點**：邏輯最直觀、不需額外記憶體。
+- **缺點**：執行效率極低，交換次數過多。
+模擬頁面：[氣泡排序示範模擬](https://linenci.github.io/sort_report/bubble_sort.html)
 
 ### 選擇排序 (Selection Sort)
 - **原理**：在未排序的數列中尋找最小值，將其放置在已排序序列的起始位置。
 - **操作**：固定一個索引位，走訪剩餘所有元素找到最小者，進行一次交換。
-模擬頁面：[氣泡排序示範模擬](https://linenci.github.io/sort_report/bubble_sort.html)
+  **優點**：數據移動次數最少（交換次數固定為 $O(n)$）。
+- **缺點**：不論資料初始狀態如何，效能恆定低效。
+模擬頁面：[選擇排序示範模擬](https://linenci.github.io/sort_report/selection_sort.html)
 
 ### 插入排序 (Insertion Sort)
 - **原理**：將數列分為已排序與未排序兩部分，逐一將未排序的元素插入到已排序序列中的適當位置。
+  **優點**：在資料近乎有序時效率極高。
+  **缺點**：處理大規模隨機數據時效能低落。
 - **操作**：類似整理撲克牌，將新牌插入到手中已有序的牌組中。
-模擬頁面：[插入排序示範模擬](https://linenci.github.io/sort_report/bubble_sort.html)
+模擬頁面：[插入排序示範模擬](https://linenci.github.io/sort_report/insertion_sort.html)
 
 ### 合併排序 (Merge Sort)
 - **原理**：採用 **分治法 (Divide and Conquer)**。將序列對半分割直到每個子序列僅剩一個元素，再進行有序合併。
+  **優點**：效能極其穩定（最差也是 $O(n \log n)$），且為穩定排序。
+- **缺點**：需要額外 $O(n)$ 的空間開銷。
 - **操作**：遞迴分割 + $O(n)$ 的合併程序。
-模擬頁面：[合併排序示範模擬](https://linenci.github.io/sort_report/bubble_sort.html)
+模擬頁面：[合併排序示範模擬](https://linenci.github.io/sort_report/merge_sort.html)
 
 ### 快速排序 (Quick Sort)
 - **原理**：選定基準值，將小於基準值的移到左邊，大於基準值的移到右邊。
+  **優點**：平均速度最快，且能在原地完成排序。
+- **缺點**：最差情況會退化至 $O(n^2)$，且為不穩定排序。
 - **操作**：透過分割過程將問題規模縮小，遞迴處理左右子區塊。
-模擬頁面：[快速排序示範模擬](https://linenci.github.io/sort_report/bubble_sort.html)
+模擬頁面：[快速排序示範模擬](https://linenci.github.io/sort_report/quick_sort.html)
 ---
 
 ## 3. 複雜度分析
@@ -76,7 +86,14 @@
 
 ## 6. 心得與結論
 
-實驗數據體現了時間複雜度是決定效能上限的核心因素。當資料量跨越萬級門檻後，$O(n^2)$ 演算法因冗餘的運算邏輯，使其耗時隨數據增長而產生斷崖式的負擔，顯示出單純依賴硬體效能無法彌補演算法結構的低效。然而，插入排序在微型或近乎有序的數據中表現優異，顯示了快取一致性與常數項優勢在實務中的價值。因此，比較好的方式是必須在合併排序的穩定性與空間開銷與快速排序的原地運算效率之間進行權衡，根據資料分佈與硬體限制採取最適化策略，而非盲目追求理論上的最快速度。
+實驗數據體現了時間複雜度是決定效能上限的核心因素。當資料量跨越萬級門檻後，$O(n^2)$ 演算法因冗餘的運算邏輯，使其耗時隨數據增長而產生斷崖式的負擔，顯示出單純依賴硬體效能無法彌補演算法結構的低效。
 
-**結論**：優化演算法對系統效能的提升，遠比單純升級硬體更具效益。
+另外，插入排序在微型或較有序的數據中表現優異，顯示了一致性與常數項優勢在實務中非常有價值。比較好的方式是必須在合併排序的穩定性與空間開銷與快速排序的原地運算效率之間進行權衡，根據資料分佈與硬體限制採取最適化策略，而非盲目追求理論上的最快速度。也就是優化演算法對系統效能的提升，遠比單純升級硬體更具效益。
+
+## 7. 參考資料
+
+1. **Visualgo - Sorting Visualization**：[https://visualgo.net/zh/sorting](https://visualgo.net/zh/sorting)
+2. **TechBridge 技術週刊：初學者學演算法**[https://blog.techbridge.cc/2017/08/19/sotring-algorithm/](https://blog.techbridge.cc/2017/08/19/sotring-algorithm/)
+3. **wikipedia**:[https://zh.wikipedia.org/zh-tw/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95](https://zh.wikipedia.org/zh-tw/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95)
+4. **Khan Academy Algorithms**：[https://www.khanacademy.org/computing/computer-science/algorithms](https://www.khanacademy.org/computing/computer-science/algorithms)
           

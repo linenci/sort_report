@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>氣泡排序視覺化演示</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        #array { display: flex; justify-content: center; margin-top: 20px; }
+        .bar { width: 30px; margin: 0 2px; background-color: steelblue; color: white; text-align: center; }
+        .comparing { background-color: orange; }
+        .swapped { background-color: green; }
+        button { margin: 5px; padding: 8px 12px; }
+    </style>
+</head>
+<body>
+    <h1>氣泡排序 (Bubble Sort) 示範</h1>
+    <p>按下「開始排序」來觀察演算法如何一步步整理數列。</p>
+    <div>
+        <button id="startBtn">開始排序</button>
+        <button id="randomBtn">重新生成數列</button>
+    </div>
+    <div id="array"></div>
+
+    <script>
+        const arrayContainer = document.getElementById('array');
+        const startBtn = document.getElementById('startBtn');
+        const randomBtn = document.getElementById('randomBtn');
+        let numbers = [];
+
+        function generateArray() {
+            numbers = [];
+            for (let i = 0; i < 10; i++) {
+                numbers.push(Math.floor(Math.random() * 100) + 1);
+            }
+            renderArray();
+        }
+
+        function renderArray(highlightIndexes = [], swappedIndexes = []) {
+            arrayContainer.innerHTML = '';
+            numbers.forEach((num, idx) => {
+                const bar = document.createElement('div');
+                bar.className = 'bar';
+                bar.style.height = num * 3 + 'px';
+                bar.textContent = num;
+                if (highlightIndexes.includes(idx)) bar.classList.add('comparing');
+                if (swappedIndexes.includes(idx)) bar.classList.add('swapped');
+                arrayContainer.appendChild(bar);
+            });
+        }
+
+        async function bubbleSort() {
+            startBtn.disabled = true;
+            const n = numbers.length;
+            for (let i = 0; i < n - 1; i++) {
+                for (let j = 0; j < n - i - 1; j++) {
+                    renderArray([j, j+1]);
+                    await delay(500);
+                    if (numbers[j] > numbers[j + 1]) {
+                        [numbers[j], numbers[j + 1]] = [numbers[j + 1], numbers[j]];
+                        renderArray([], [j, j+1]);
+                        await delay(500);
+                    }
+                }
+            }
+            startBtn.disabled = false;
+        }
+
+        function delay(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        startBtn.addEventListener('click', bubbleSort);
+        randomBtn.addEventListener('click', generateArray);
+
+        // 初始化
+        generateArray();
+    </script>
+</body>
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>氣泡排序視覺化演示</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        #array { display: flex; justify-content: center; margin-top: 20px; }
+        .bar { width: 30px; margin: 0 2px; background-color: steelblue; color: white; text-align: center; }
+        .comparing { background-color: orange; }
+        .swapped { background-color: green; }
+        button { margin: 5px; padding: 8px 12px; }
+    </style>
+</head>
+<body>
+    <h1>氣泡排序 (Bubble Sort) 示範</h1>
+    <p>按下「開始排序」來觀察演算法如何一步步整理數列。</p>
+    <div>
+        <button id="startBtn">開始排序</button>
+        <button id="randomBtn">重新生成數列</button>
+    </div>
+    <div id="array"></div>
+
+    <script>
+        const arrayContainer = document.getElementById('array');
+        const startBtn = document.getElementById('startBtn');
+        const randomBtn = document.getElementById('randomBtn');
+        let numbers = [];
+
+        function generateArray() {
+            numbers = [];
+            for (let i = 0; i < 10; i++) {
+                numbers.push(Math.floor(Math.random() * 100) + 1);
+            }
+            renderArray();
+        }
+
+        function renderArray(highlightIndexes = [], swappedIndexes = []) {
+            arrayContainer.innerHTML = '';
+            numbers.forEach((num, idx) => {
+                const bar = document.createElement('div');
+                bar.className = 'bar';
+                bar.style.height = num * 3 + 'px';
+                bar.textContent = num;
+                if (highlightIndexes.includes(idx)) bar.classList.add('comparing');
+                if (swappedIndexes.includes(idx)) bar.classList.add('swapped');
+                arrayContainer.appendChild(bar);
+            });
+        }
+
+        async function bubbleSort() {
+            startBtn.disabled = true;
+            const n = numbers.length;
+            for (let i = 0; i < n - 1; i++) {
+                for (let j = 0; j < n - i - 1; j++) {
+                    renderArray([j, j+1]);
+                    await delay(500);
+                    if (numbers[j] > numbers[j + 1]) {
+                        [numbers[j], numbers[j + 1]] = [numbers[j + 1], numbers[j]];
+                        renderArray([], [j, j+1]);
+                        await delay(500);
+                    }
+                }
+            }
+            startBtn.disabled = false;
+        }
+
+        function delay(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        startBtn.addEventListener('click', bubbleSort);
+        randomBtn.addEventListener('click', generateArray);
+
+        // 初始化
+        generateArray();
+    </script>
+</body>
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>氣泡排序視覺化演示</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        #array { display: flex; justify-content: center; margin-top: 20px; }
+        .bar { width: 30px; margin: 0 2px; background-color: steelblue; color: white; text-align: center; }
+        .comparing { background-color: orange; }
+        .swapped { background-color: green; }
+        button { margin: 5px; padding: 8px 12px; }
+    </style>
+</head>
+<body>
+    <h1>氣泡排序 (Bubble Sort) 示範</h1>
+    <p>按下「開始排序」來觀察演算法如何一步步整理數列。</p>
+    <div>
+        <button id="startBtn">開始排序</button>
+        <button id="randomBtn">重新生成數列</button>
+    </div>
+    <div id="array"></div>
+
+    <script>
+        const arrayContainer = document.getElementById('array');
+        const startBtn = document.getElementById('startBtn');
+        const randomBtn = document.getElementById('randomBtn');
+        let numbers = [];
+
+        function generateArray() {
+            numbers = [];
+            for (let i = 0; i < 10; i++) {
+                numbers.push(Math.floor(Math.random() * 100) + 1);
+            }
+            renderArray();
+        }
+
+        function renderArray(highlightIndexes = [], swappedIndexes = []) {
+            arrayContainer.innerHTML = '';
+            numbers.forEach((num, idx) => {
+                const bar = document.createElement('div');
+                bar.className = 'bar';
+                bar.style.height = num * 3 + 'px';
+                bar.textContent = num;
+                if (highlightIndexes.includes(idx)) bar.classList.add('comparing');
+                if (swappedIndexes.includes(idx)) bar.classList.add('swapped');
+                arrayContainer.appendChild(bar);
+            });
+        }
+
+        async function bubbleSort() {
+            startBtn.disabled = true;
+            const n = numbers.length;
+            for (let i = 0; i < n - 1; i++) {
+                for (let j = 0; j < n - i - 1; j++) {
+                    renderArray([j, j+1]);
+                    await delay(500);
+                    if (numbers[j] > numbers[j + 1]) {
+                        [numbers[j], numbers[j + 1]] = [numbers[j + 1], numbers[j]];
+                        renderArray([], [j, j+1]);
+                        await delay(500);
+                    }
+                }
+            }
+            startBtn.disabled = false;
+        }
+
+        function delay(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        startBtn.addEventListener('click', bubbleSort);
+        randomBtn.addEventListener('click', generateArray);
+
+        // 初始化
+        generateArray();
+    </script>
+</body>
+</html>

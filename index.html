@@ -1,7 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>排序演算法入口</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+        h1 {
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            font-size: 2.5em;
+        }
+        .description {
+            margin-bottom: 40px;
+            font-size: 18px;
+            opacity: 0.9;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin: 20px 0;
+        }
+        a {
+            display: inline-block;
+            text-decoration: none;
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+            background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
+            padding: 15px 30px;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            width: 250px;
+        }
+        a:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            text-decoration: none;
+        }
+        @media (max-width: 600px) {
+            h1 { font-size: 2em; }
+            a { width: 200px; font-size: 18px; }
+        }
+    </style>
 </head>
 <body>
-    <h1>氣泡排序 (Bubble Sort) 示範</h1>
-    <p><a href="bubble_sort.html">前往氣泡排序演示頁面</a></p>
-    <p>按下「開始排序」來觀察演算法如何一步步整理數列。</p>
-    <div>
-        <button id="startBtn">開始排序</button>
+    <div class="container">
+        <h1>排序演算法視覺化演示</h1>
+        <p class="description">選擇一個排序演算法來觀察其運作過程：</p>
+        <ul>
+            <li><a href="bubble_sort.html">氣泡排序 (Bubble Sort)</a></li>
+            <li><a href="selection_sort.html">選擇排序 (Selection Sort)</a></li>
+            <li><a href="insertion_sort.html">插入排序 (Insertion Sort)</a></li>
+            <li><a href="merge_sort.html">合併排序 (Merge Sort)</a></li>
+        </ul>
+    </div>
+</body>
+</html>

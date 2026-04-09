@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>氣泡排序視覺化演示</title>
+    <title>合併排序視覺化演示</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -102,11 +102,11 @@
             background: linear-gradient(180deg, #fdcb6e, #e17055);
             transform: scaleY(1.1);
         }
-        .bar.swapped {
+        .bar.merging {
             background: linear-gradient(180deg, #00b894, #00cec9);
-            animation: swap 0.5s ease;
+            animation: merge 0.4s ease;
         }
-        @keyframes swap {
+        @keyframes merge {
             0%, 100% { transform: scaleY(1); }
             50% { transform: scaleY(1.2); }
         }
@@ -118,25 +118,15 @@
             padding: 15px;
             border-radius: 10px;
         }
-        .stat {
-            text-align: center;
-        }
-        .stat-value {
-            font-size: 24px;
-            font-weight: bold;
-            color: #FFD700;
-        }
-        .back-link {
-            margin-top: 20px;
-        }
+        .stat { text-align: center; }
+        .stat-value { font-size: 24px; font-weight: bold; color: #FFD700; }
+        .back-link { margin-top: 20px; }
         .back-link a {
             color: #FFD700;
             text-decoration: none;
             font-weight: bold;
         }
-        .back-link a:hover {
-            text-decoration: underline;
-        }
+        .back-link a:hover { text-decoration: underline; }
         @media (max-width: 600px) {
             .bar { width: 25px; margin: 0 1px; }
             .controls { flex-direction: column; align-items: center; }
@@ -146,8 +136,8 @@
 </head>
 <body>
     <div class="container">
-        <h1>氣泡排序 (Bubble Sort) 視覺化演示</h1>
-        <p class="description">氣泡排序是一種簡單的排序演算法，它重複地走訪要排序的數列，一次比較兩個元素，如果他們的順序錯誤就把他們交換過來。</p>
+        <h1>合併排序 (Merge Sort) 視覺化演示</h1>
+        <p class="description">合併排序是一種穩定的分治法排序演算法，將數列遞迴拆分成較小片段後，再逐步合併回來。</p>
 
         <div class="speed-control">
             <label for="speed">排序速度:</label>
@@ -163,18 +153,9 @@
         <div id="array"></div>
 
         <div class="stats">
-            <div class="stat">
-                <div>比較次數</div>
-                <div class="stat-value" id="comparisons">0</div>
-            </div>
-            <div class="stat">
-                <div>交換次數</div>
-                <div class="stat-value" id="swaps">0</div>
-            </div>
-            <div class="stat">
-                <div>當前步驟</div>
-                <div class="stat-value" id="step">0</div>
-            </div>
+            <div class="stat"><div>比較次數</div><div class="stat-value" id="comparisons">0</div></div>
+            <div class="stat"><div>寫入次數</div><div class="stat-value" id="writes">0</div></div>
+            <div class="stat"><div>當前步驟</div><div class="stat-value" id="step">0</div></div>
         </div>
 
         <div class="back-link">
@@ -189,11 +170,12 @@
         const speedInput = document.getElementById('speed');
         const speedValue = document.getElementById('speedValue');
         const comparisonsEl = document.getElementById('comparisons');
-        const swapsEl = document.getElementById('swaps');
+        const writesEl = document.getElementById('writes');
         const stepEl = document.getElementById('step');
+
         let numbers = [];
         let comparisons = 0;
-        let swaps = 0;
+        let writes = 0;
         let step = 0;
         let delayTime = 500;
 
@@ -208,18 +190,18 @@
 
         function resetStats() {
             comparisons = 0;
-            swaps = 0;
+            writes = 0;
             step = 0;
             updateStats();
         }
 
         function updateStats() {
             comparisonsEl.textContent = comparisons;
-            swapsEl.textContent = swaps;
+            writesEl.textContent = writes;
             stepEl.textContent = step;
         }
 
-        function renderArray(highlightIndexes = [], swappedIndexes = []) {
+        function renderArray(highlightIndexes = [], mergeIndexes = []) {
             arrayContainer.innerHTML = '';
             numbers.forEach((num, idx) => {
                 const bar = document.createElement('div');
@@ -227,49 +209,90 @@
                 bar.style.height = num * 3 + 'px';
                 bar.textContent = num;
                 if (highlightIndexes.includes(idx)) bar.classList.add('comparing');
-                if (swappedIndexes.includes(idx)) bar.classList.add('swapped');
+                if (mergeIndexes.includes(idx)) bar.classList.add('merging');
                 arrayContainer.appendChild(bar);
             });
-        }
-
-        async function bubbleSort() {
-            startBtn.disabled = true;
-            randomBtn.disabled = true;
-            const n = numbers.length;
-            for (let i = 0; i < n - 1; i++) {
-                for (let j = 0; j < n - i - 1; j++) {
-                    step++;
-                    renderArray([j, j+1]);
-                    comparisons++;
-                    updateStats();
-                    await delay(delayTime);
-                    if (numbers[j] > numbers[j + 1]) {
-                        [numbers[j], numbers[j + 1]] = [numbers[j + 1], numbers[j]];
-                        swaps++;
-                        renderArray([], [j, j+1]);
-                        updateStats();
-                        await delay(delayTime);
-                    }
-                }
-            }
-            renderArray();
-            startBtn.disabled = false;
-            randomBtn.disabled = false;
         }
 
         function delay(ms) {
             return new Promise(resolve => setTimeout(resolve, ms));
         }
 
-        speedInput.addEventListener('input', (e) => {
-            delayTime = parseInt(e.target.value);
-            speedValue.textContent = delayTime + 'ms';
+        async function merge(left, mid, right) {
+            const n1 = mid - left + 1;
+            const n2 = right - mid;
+            const L = [];
+            const R = [];
+
+            for (let i = 0; i < n1; i++) L.push(numbers[left + i]);
+            for (let j = 0; j < n2; j++) R.push(numbers[mid + 1 + j]);
+
+            let i = 0, j = 0, k = left;
+
+            while (i < n1 && j < n2) {
+                step++;
+                comparisons++;
+                renderArray([k], [k]);
+                updateStats();
+                await delay(delayTime);
+
+                if (L[i] <= R[j]) {
+                    numbers[k] = L[i];
+                    i++;
+                } else {
+                    numbers[k] = R[j];
+                    j++;
+                }
+                writes++;
+                k++;
+                renderArray([], [k-1]);
+                updateStats();
+                await delay(delayTime);
+            }
+
+            while (i < n1) {
+                step++;
+                numbers[k] = L[i];
+                i++; k++; writes++;
+                renderArray([], [k-1]);
+                updateStats();
+                await delay(delayTime);
+            }
+
+            while (j < n2) {
+                step++;
+                numbers[k] = R[j];
+                j++; k++; writes++;
+                renderArray([], [k-1]);
+                updateStats();
+                await delay(delayTime);
+            }
+        }
+
+        async function mergeSort(left, right) {
+            if (left >= right) return;
+            const mid = Math.floor((left + right) / 2);
+            await mergeSort(left, mid);
+            await mergeSort(mid + 1, right);
+            await merge(left, mid, right);
+        }
+
+        startBtn.addEventListener('click', async () => {
+            startBtn.disabled = true;
+            randomBtn.disabled = true;
+            await mergeSort(0, numbers.length - 1);
+            renderArray();
+            startBtn.disabled = false;
+            randomBtn.disabled = false;
         });
 
-        startBtn.addEventListener('click', bubbleSort);
         randomBtn.addEventListener('click', generateArray);
 
-        // 初始化
+        speedInput.addEventListener('input', (e) => {
+            delayTime = Number(e.target.value);
+            speedValue.textContent = `${delayTime}ms`;
+        });
+
         generateArray();
     </script>
 </body>

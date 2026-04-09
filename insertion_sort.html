@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>氣泡排序視覺化演示</title>
+    <title>插入排序視覺化演示</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -106,9 +106,17 @@
             background: linear-gradient(180deg, #00b894, #00cec9);
             animation: swap 0.5s ease;
         }
+        .bar.current {
+            background: linear-gradient(180deg, #a29bfe, #6c5ce7);
+            animation: currentPulse 1s infinite;
+        }
         @keyframes swap {
             0%, 100% { transform: scaleY(1); }
             50% { transform: scaleY(1.2); }
+        }
+        @keyframes currentPulse {
+            0%, 100% { transform: scaleY(1); }
+            50% { transform: scaleY(1.05); }
         }
         .stats {
             display: flex;
@@ -146,8 +154,8 @@
 </head>
 <body>
     <div class="container">
-        <h1>氣泡排序 (Bubble Sort) 視覺化演示</h1>
-        <p class="description">氣泡排序是一種簡單的排序演算法，它重複地走訪要排序的數列，一次比較兩個元素，如果他們的順序錯誤就把他們交換過來。</p>
+        <h1>插入排序 (Insertion Sort) 視覺化演示</h1>
+        <p class="description">插入排序是一種簡單的排序演算法，它的工作原理是通過構建有序序列，對於未排序數據，在已排序序列中從後向前掃描，找到相應位置並插入。</p>
 
         <div class="speed-control">
             <label for="speed">排序速度:</label>
@@ -219,7 +227,7 @@
             stepEl.textContent = step;
         }
 
-        function renderArray(highlightIndexes = [], swappedIndexes = []) {
+        function renderArray(highlightIndexes = [], swappedIndexes = [], currentIndex = -1) {
             arrayContainer.innerHTML = '';
             numbers.forEach((num, idx) => {
                 const bar = document.createElement('div');
@@ -228,36 +236,43 @@
                 bar.textContent = num;
                 if (highlightIndexes.includes(idx)) bar.classList.add('comparing');
                 if (swappedIndexes.includes(idx)) bar.classList.add('swapped');
+                if (idx === currentIndex) bar.classList.add('current');
                 arrayContainer.appendChild(bar);
             });
         }
 
-        async function bubbleSort() {
+        async function insertionSort() {
             startBtn.disabled = true;
             randomBtn.disabled = true;
-            const n = numbers.length;
-            for (let i = 0; i < n - 1; i++) {
-                for (let j = 0; j < n - i - 1; j++) {
-                    step++;
-                    renderArray([j, j+1]);
+            for (let i = 1; i < numbers.length; i++) {
+                let key = numbers[i];
+                let j = i - 1;
+                step++;
+                renderArray([], [], i);
+                updateStats();
+                await sleep(delayTime);
+                while (j >= 0 && numbers[j] > key) {
+                    renderArray([j, j+1], []);
                     comparisons++;
                     updateStats();
-                    await delay(delayTime);
-                    if (numbers[j] > numbers[j + 1]) {
-                        [numbers[j], numbers[j + 1]] = [numbers[j + 1], numbers[j]];
-                        swaps++;
-                        renderArray([], [j, j+1]);
-                        updateStats();
-                        await delay(delayTime);
-                    }
+                    await sleep(delayTime);
+                    numbers[j + 1] = numbers[j];
+                    swaps++;
+                    renderArray([], [j, j+1]);
+                    updateStats();
+                    await sleep(delayTime);
+                    j = j - 1;
                 }
+                numbers[j + 1] = key;
+                renderArray([], []);
+                await sleep(delayTime);
             }
             renderArray();
             startBtn.disabled = false;
             randomBtn.disabled = false;
         }
 
-        function delay(ms) {
+        function sleep(ms) {
             return new Promise(resolve => setTimeout(resolve, ms));
         }
 
@@ -266,10 +281,9 @@
             speedValue.textContent = delayTime + 'ms';
         });
 
-        startBtn.addEventListener('click', bubbleSort);
+        startBtn.addEventListener('click', insertionSort);
         randomBtn.addEventListener('click', generateArray);
 
-        // 初始化
         generateArray();
     </script>
 </body>
